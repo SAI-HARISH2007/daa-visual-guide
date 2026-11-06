@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DAA Visual Guide</title>
+<style>
+:root{--bg:#f5f1e8;--panel:#fffdf8;--ink:#201d18;--mut:#6b6459;--line:#ddd5c5;--acc:#0f6b5c;--acc2:#e7f1ec;--hot:#f4b740;--hotink:#201d18;--ok:#2f9e6e;--okbg:#d5ecdf;--seen:#bcd6ee;--bad:#d4493f;--badbg:#f8d9d5;--pv:#d8e6f4;--code:#2a2620;--codeink:#f0e9db;--a:#cfe2f3;--b:#f6d9c4;--dk:#c9bda5;--lt:#efe7d6}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#16150f;--panel:#201e17;--ink:#ece5d6;--mut:#a69d8c;--line:#3a362b;--acc:#5cc9b0;--acc2:#1f3530;--okbg:#1f4434;--seen:#2c4a66;--badbg:#4d2522;--pv:#263c52;--code:#100f0b;--a:#27435c;--b:#55392a;--dk:#57503f;--lt:#3b3629}}
+:root[data-theme="dark"]{--bg:#16150f;--panel:#201e17;--ink:#ece5d6;--mut:#a69d8c;--line:#3a362b;--acc:#5cc9b0;--acc2:#1f3530;--okbg:#1f4434;--seen:#2c4a66;--badbg:#4d2522;--pv:#263c52;--code:#100f0b;--a:#27435c;--b:#55392a;--dk:#57503f;--lt:#3b3629}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.2;font-weight:700;margin:0}
+a{color:var(--acc)}button,input,textarea{font:inherit;color:inherit}
+.shell{display:grid;grid-template-columns:270px minmax(0,1fr);min-height:100vh}
+nav{border-right:1px solid var(--line);padding:18px 14px;position:sticky;top:0;height:100vh;overflow:auto;background:var(--panel)}
+nav h1{font-size:21px}nav .sub{font-size:13px;color:var(--mut);margin:2px 0 12px}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;background:var(--acc)}
+.top{display:block;padding:5px 8px;border-radius:6px;text-decoration:none;color:var(--ink);font-weight:600;font-size:15px}
+nav h3{font:700 12px/1.3 system-ui,sans-serif;color:var(--mut);margin:14px 8px 3px;letter-spacing:.03em}
+nav a.it{display:flex;gap:6px;justify-content:space-between;padding:3px 8px;border-radius:6px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.35}
+nav a:hover{background:var(--acc2)}nav a.on{background:var(--acc);color:var(--panel)}
+.tog{margin-top:14px;width:100%}
+main{padding:30px clamp(16px,4vw,48px) 80px;max-width:1040px;width:100%}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:7px;padding:7px 12px;cursor:pointer;min-height:38px}
+.btn:hover{border-color:var(--acc)}.btn.pri{background:var(--acc);color:var(--panel);border-color:var(--acc);font-weight:600}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:1px 7px;border-radius:5px;background:var(--acc2);color:var(--acc);margin-right:4px}
+.tag.post{background:var(--b);color:var(--ink)}.tag.supp{background:var(--badbg);color:var(--ink)}
+.page h2{font-size:clamp(28px,5vw,38px);margin:8px 0 10px}
+.idea{font-size:19px;line-height:1.5;font-family:Georgia,serif;max-width:68ch;margin:0 0 20px}
+.sec{margin:26px 0}.sec>h3{font-size:20px;margin-bottom:8px}
+.sec ol,.sec ul{margin:0;padding-left:22px}.sec li{margin:3px 0}
+pre{background:var(--code);color:var(--codeink);padding:14px;border-radius:8px;overflow:auto;font:13.5px/1.55 ui-monospace,Consolas,Menlo,monospace;margin:0}
+.note{border-left:4px solid var(--hot);padding:9px 13px;background:var(--panel);border-radius:0 7px 7px 0;margin:12px 0}.note.bad{border-color:var(--bad)}
+.lede{max-width:68ch;color:var(--mut)}
+.lens{display:flex;gap:6px;margin:14px 0 18px;flex-wrap:wrap}.lens .on{background:var(--acc);color:var(--panel);border-color:var(--acc)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:14px}
+.col{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}
+.col h3{font-size:18px}.col h4{margin:12px 0 5px;font-size:13px;color:var(--mut)}.col p{margin:3px 0 6px;font-size:14px;color:var(--mut)}
+.chip{display:inline-block;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:2px 8px;margin:2px 3px 2px 0;font-size:14px}
+.chip:hover{border-color:var(--acc)}.chip.done{background:var(--okbg);border-color:var(--ok)}
+.chip.post{border-left:3px solid var(--hot)}
+.conf{border-top:1px solid var(--line);padding:12px 0}.conf b{display:block;font-family:Georgia,serif;font-size:17px}.conf p{margin:3px 0 6px;max-width:72ch}
+.player{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;margin-top:10px}
+.form{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));align-items:end}
+.form label{font-size:13px;color:var(--mut);display:block}.form input,.form textarea{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:var(--bg);font-family:ui-monospace,Consolas,monospace;font-size:14px;color:var(--ink)}
+.form textarea{min-height:92px}.pres{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.stage{min-height:120px;margin:14px 0 8px;overflow:auto}.nar{min-height:62px;padding:9px 12px;background:var(--acc2);border-radius:7px}
+.ctl{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:10px}.ctl input{flex:1;min-width:120px;accent-color:var(--acc)}.ctl span{font-size:13px;color:var(--mut);min-width:60px;text-align:right}
+.arr{display:flex;gap:4px;flex-wrap:wrap;padding-bottom:4px}
+.cell{width:50px;text-align:center}.cell small{display:block;font-size:11px;color:var(--mut)}.cell b{display:block;padding:8px 0;border:1px solid var(--line);border-radius:6px;background:var(--bg);font-size:15px;transition:background .2s}.cell i{display:block;font-style:normal;font-size:11px;height:16px;color:var(--acc);font-weight:700;white-space:nowrap}
+.cell.hot b,td.hot{background:var(--hot);color:var(--hotink)}.cell.ok b,td.ok{background:var(--okbg)}.cell.dim b{opacity:.35}.cell.a b{background:var(--a)}.cell.b b{background:var(--b)}td.pv{background:var(--pv)}
+.tw{overflow:auto}table.dp{border-collapse:collapse;font-size:14px}table.dp th,table.dp td{border:1px solid var(--line);padding:5px 9px;text-align:center;min-width:36px}table.dp th{color:var(--mut);font-weight:600;background:var(--bg)}
+.ch th,.ch td{text-align:left!important}.ch{width:100%}
+.two{display:flex;gap:18px;flex-wrap:wrap}.two h5{margin:0 0 4px;font-size:13px}
+.kv{display:flex;gap:6px 16px;flex-wrap:wrap;margin-top:8px;font-size:14px}.kv em{font-style:normal;color:var(--mut)}
+.muted{font-size:13px;color:var(--mut);margin-top:5px}
+svg.g{width:100%;max-width:520px;display:block;height:auto}
+.ed{stroke:var(--mut);stroke-width:1.6;opacity:.55}.ed.tree{stroke:var(--ok);stroke-width:4;opacity:1}.ed.hot{stroke:var(--hot);stroke-width:5;opacity:1}.ed.rej{stroke:var(--bad);stroke-dasharray:5 4;opacity:.8}.ed.back{stroke:var(--acc);stroke-dasharray:6 4;stroke-width:2.4;opacity:1}
+.ahp{fill:var(--mut)}.nd{fill:var(--panel);stroke:var(--ink);stroke-width:1.5}.nd.hot{fill:var(--hot)}.nd.ok{fill:var(--okbg);stroke:var(--ok)}.nd.seen{fill:var(--seen)}.nd.bad{fill:var(--bad)}
+.nd.c1{fill:#e8a33d}.nd.c2{fill:#5aa7d6}.nd.c3{fill:#6cc08b}.nd.c4{fill:#d77fa1}.nd.c5{fill:#a58fd0}.nd.c6{fill:#bdb76b}
+.nt{text-anchor:middle;font:700 14px system-ui,sans-serif;fill:var(--ink)}.nd.hot+.nt,.nd.c1+.nt,.nd.c2+.nt,.nd.c3+.nt,.nd.c4+.nt,.nd.c5+.nt,.nd.c6+.nt{fill:#201d18}
+.lb{text-anchor:middle;font:700 13px system-ui,sans-serif;fill:var(--acc)}.wl rect{fill:var(--panel)}.wl text{text-anchor:middle;font:12px system-ui,sans-serif;fill:var(--ink)}
+.board{display:grid;grid-template-columns:repeat(var(--n),1fr);width:min(100%,calc(var(--n)*58px));border:2px solid var(--ink)}
+.sq{aspect-ratio:1;display:grid;place-items:center;background:var(--lt);font-size:24px}.sq.dk{background:var(--dk)}.sq.tryq{background:var(--hot);color:#201d18}.sq.badq{background:var(--bad);color:#fff}
+details{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:9px 13px}summary{cursor:pointer;font-weight:600}details p{margin:8px 0 2px}
+.done{display:flex;gap:9px;align-items:center;margin-top:18px;font-weight:600;min-height:40px}.done input{width:20px;height:20px;accent-color:var(--acc)}
+.pn{display:flex;justify-content:space-between;gap:10px;margin-top:22px}.pn a{text-decoration:none}
+.grow{display:grid;grid-template-columns:90px 1fr auto;gap:5px 9px;align-items:center;font-size:14px;margin-top:10px}.grow i{display:block;height:13px;background:var(--acc);border-radius:2px;min-width:1px}.grow span{font-family:ui-monospace,Consolas,monospace}
+.err{color:var(--bad);font-weight:600}
+.menu{display:none}
+@media (max-width:820px){.shell{display:block}nav{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:12px 16px}.menu{display:inline-block;margin-top:8px}nav .list{display:none}nav.open .list{display:block}main{padding:20px 16px 60px}.cell{width:44px}}
+@media print{nav,.player,.done,.pn{display:none}.shell{display:block}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head>
+<body><div class="shell"><nav id="nav"></nav><main id="main"></main></div>
+<script src="algos.js"></script><script src="topics.js"></script>
+<script>
+const $=s=>document.querySelector(s);let done={};try{done=JSON.parse(localStorage.getItem('daa-done')||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem('daa-done',JSON.stringify(done))}catch(e){}};
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const byId=Object.fromEntries(TOPICS.map(t=>[t.id,t]));let timer=null,lens='unit',step=null;
+function theme(){const r=document.documentElement,now=r.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'),n=now==='dark'?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('daa-theme',n)}catch(e){}}
+try{const t=localStorage.getItem('daa-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}
+function nav(id){const c=Object.keys(done).filter(k=>done[k]&&byId[k]).length;let s=`<h1>DAA Visual Guide</h1><div class="sub">AI204 · ${c} of ${TOPICS.length} done</div><div class="bar"><i style="width:${c/TOPICS.length*100}%"></i></div><button class="btn menu" onclick="$('#nav').classList.toggle('open')">Topics</button><div class="list"><a class="top ${id==='map'?'on':''}" href="#/map" style="margin-top:10px">The map</a><a class="top ${id==='conf'?'on':''}" href="#/conf">Confusions</a><a class="top ${id==='sheet'?'on':''}" href="#/sheet">Complexity sheet</a>`;for(const u in UNITS){s+=`<h3>UNIT ${u}: ${UNITS[u]}</h3>`;for(const t of TOPICS.filter(x=>x.u==u))s+=`<a class="it ${id===t.id?'on':''}" href="#/t/${t.id}"><span>${t.n}</span><span>${done[t.id]?'✓':''}</span></a>`}$('#nav').innerHTML=s+`<button class="btn tog" onclick="theme()">Switch theme</button></div>`}
+const chip=t=>`<a class="chip ${done[t.id]?'done':''} ${t.ph==='POST'?'post':''}" href="#/t/${t.id}">${t.n}</a>`;
+function map(){let b='';if(lens==='unit')for(const u in UNITS){const ts=TOPICS.filter(t=>t.u==u),g=[...new Set(ts.map(t=>t.t))];b+=`<div class="col"><h3>Unit ${u}</h3><p>${UNITS[u]}</p>${g.map(k=>`<h4>${TECH[k][0]}</h4>${ts.filter(t=>t.t===k).map(chip).join('')}`).join('')}</div>`}else for(const k in TECH){b+=`<div class="col"><h3>${TECH[k][0]}</h3><p>${TECH[k][1]}</p>${TOPICS.filter(t=>t.t===k).map(chip).join('')}</div>`}
+$('#main').innerHTML=`<div class="page"><h2>What comes under what</h2><p class="lede">The units are how the course is organised. The techniques are how the algorithms actually relate. Flip between them. Topics with an amber edge are post-mid.</p><div class="lens"><button class="btn ${lens==='unit'?'on':''}" onclick="lens='unit';map()">By unit</button><button class="btn ${lens==='tech'?'on':''}" onclick="lens='tech';map()">By technique</button></div><div class="cols">${b}</div>
+<div class="sec"><h3>Which technique fits?</h3><table class="dp ch">${CHOOSE.map(c=>`<tr><td>${c[0]}</td><td><a href="#/t/${c[2]}">${c[1]}</a></td></tr>`).join('')}</table></div>
+<div class="sec"><h3>The paper</h3><p class="lede" style="color:inherit">100 marks, 3 hours. <b>Part A</b> 5×4: one from each unit. <b>Part B</b> 5×8: one from each unit. <b>Part C</b> 2×20: one from pre-mid (first 2.5 units), one from post-mid. Every unit is guaranteed 12 marks. Your pack lists the exam as Sat 21 Nov. Probable questions are in <code>DAA_PROBABLE_QUESTIONS.md</code>.</p></div></div>`}
+function conf(){$('#main').innerHTML=`<div class="page"><h2>Things that look the same</h2>${CONFUSE.map(c=>`<div class="conf"><b>${c[0]}</b><p>${c[1]}</p>${c[2].map(i=>chip(byId[i])).join('')}</div>`).join('')}</div>`}
+function sheet(){$('#main').innerHTML=`<div class="page"><h2>Complexity sheet</h2><div class="tw"><table class="dp ch"><tr><th>Topic</th><th>Technique</th><th>Time</th><th>Space</th></tr>${TOPICS.filter(t=>t.cx[0]!=='—').map(t=>`<tr><td><a href="#/t/${t.id}">${t.n}</a></td><td>${TECH[t.t][0]}</td><td>${t.cx[0]}</td><td>${t.cx[1]}</td></tr>`).join('')}</table></div></div>`}
+function topic(id){const t=byId[id],i=TOPICS.indexOf(t),p=TOPICS[i-1],n=TOPICS[i+1],vz=VIZ[id];$('#main').innerHTML=`<div class="page"><span class="tag">Unit ${t.u}</span><span class="tag">${TECH[t.t][0]}</span><span class="tag ${t.ph==='POST'?'post':''}">${t.ph}-MID</span>${t.supp?'<span class="tag supp">SUPP</span>':''}<h2>${t.n}</h2><p class="idea">${t.idea}</p>${t.supp?`<div class="note"><b>Supplementary:</b> ${t.supp} Check against what was taught in class.</div>`:''}${t.warn?`<div class="note bad"><b>Careful:</b> ${t.warn}</div>`:''}
+${vz?`<div class="sec"><h3>Watch it run</h3><p class="muted">Edit the input and press Run. Arrow keys step through.</p><div class="player" id="pl"></div></div>`:''}${t.widget?`<div class="sec"><h3>Try it</h3><div class="player" id="wg"></div></div>`:''}
+<div class="sec"><h3>Steps</h3><ol>${t.steps.map(s=>`<li>${s}</li>`).join('')}</ol></div><div class="sec"><h3>On paper</h3><pre>${esc(t.code)}</pre></div>
+${t.cx[0]!=='—'?`<div class="sec"><h3>Cost</h3><div class="kv"><span><em>Time</em> ${t.cx[0]}</span><span><em>Space</em> ${t.cx[1]}</span></div></div>`:''}
+<div class="sec"><h3>In the exam</h3><p style="margin:0">${t.exam}</p></div><div class="sec"><details><summary>Recall: ${t.q}</summary><p>${t.a}</p></details></div>
+<label class="done"><input type="checkbox" ${done[id]?'checked':''} onchange="done['${id}']=this.checked;save();nav('${id}')">I can explain this without looking</label>
+<div class="pn"><span>${p?`<a href="#/t/${p.id}">← ${p.n}</a>`:''}</span><span>${n?`<a href="#/t/${n.id}">${n.n} →</a>`:''}</span></div></div>`;if(vz)player(id,vz);if(t.widget)W[t.widget]($('#wg'));scrollTo(0,0)}
+function player(id,c){const k=c.k||id,el=$('#pl');el.innerHTML=`<div class="form">${c.f.map(f=>`<div style="${f[3]||f[2].length>38?'grid-column:1/-1':''}"><label for="f-${f[0]}">${f[1]}</label>${f[3]?`<textarea id="f-${f[0]}">${esc(f[2])}</textarea>`:`<input id="f-${f[0]}" value="${esc(f[2])}">`}</div>`).join('')}</div><div class="pres">${(c.pre||[]).map((p,i)=>`<button class="btn" data-p="${i}">${p[0]}</button>`).join('')}<button class="btn pri" id="run">Run</button></div><div class="stage" id="st"></div><div class="nar" id="nr" aria-live="polite"></div><div class="ctl"><button class="btn" id="pv" aria-label="Previous step">◀</button><button class="btn" id="pp">Play</button><button class="btn" id="nx" aria-label="Next step">▶</button><input type="range" id="rg" min="0" value="0" aria-label="Step"><span id="ct"></span></div>`;
+let fr=[],i=0;const stop=()=>{clearInterval(timer);timer=null;$('#pp').textContent='Play'},show=()=>{if(!fr.length)return;$('#st').innerHTML=fr[i].v;$('#nr').textContent=fr[i].n;$('#rg').value=i;$('#ct').textContent=`${i+1} / ${fr.length}`};step=d=>{stop();i=Math.max(0,Math.min(fr.length-1,i+d));show()};
+const run=()=>{stop();try{fr=V[k](Object.fromEntries(c.f.map(f=>[f[0],$('#f-'+f[0]).value]))).frames;i=0;$('#rg').max=fr.length-1;show()}catch(e){fr=[];$('#st').innerHTML=`<div class="err">${esc(e.message)}</div>`;$('#nr').textContent='Fix the input and press Run.';$('#ct').textContent=''}};
+$('#run').onclick=run;$('#pv').onclick=()=>step(-1);$('#nx').onclick=()=>step(1);$('#rg').oninput=e=>{stop();i=+e.target.value;show()};$('#pp').onclick=()=>{if(timer)return stop();if(i>=fr.length-1)i=0;$('#pp').textContent='Pause';timer=setInterval(()=>{if(i>=fr.length-1)return stop();i++;show()},1200)};el.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{for(const[f,v]of Object.entries(c.pre[+b.dataset.p][1]))$('#f-'+f).value=v;run()});run()}
+const W={growth(el){const F=[['log n',n=>Math.log2(n)],['n',n=>n],['n log n',n=>n*Math.log2(n)],['n²',n=>n*n],['n³',n=>n**3],['2ⁿ',n=>2**n],['n!',n=>{let r=1;for(let i=2;i<=n;i++)r*=i;return r}]];el.innerHTML=`<label>n = <b id="gn">16</b><input type="range" id="gr" min="2" max="64" value="16" style="width:100%;accent-color:var(--acc)"></label><div class="grow" id="gg"></div><p class="muted">Bars use a log scale, or they would not fit. Each step right is ten times bigger.</p>`;const d=()=>{const n=+$('#gr').value;$('#gn').textContent=n;const v=F.map(f=>f[1](n)),m=Math.log10(Math.max(...v))||1;$('#gg').innerHTML=F.map((f,i)=>`<div>${f[0]}</div><i style="width:${Math.max(1,Math.log10(Math.max(v[i],1))/m*100)}%"></i><span>${v[i]<1e7?Math.round(v[i]).toLocaleString():v[i].toExponential(1)}</span>`).join('')};$('#gr').oninput=d;d()},
+master(el){el.innerHTML=`<div class="form"><div><label>a (subproblems)</label><input id="ma" value="7"></div><div><label>b (size divisor)</label><input id="mb" value="2"></div><div><label>d, where f(n) = n^d</label><input id="md" value="2"></div></div><div class="pres"><button class="btn" data-m="2 2 1">Merge sort</button><button class="btn" data-m="1 2 0">Binary search</button><button class="btn" data-m="7 2 2">Strassen</button><button class="btn" data-m="8 2 2">Block multiply</button></div><div class="nar" id="mr"></div>`;const d=()=>{const[a,b,c]=['ma','mb','md'].map(i=>+$('#'+i).value),e=Math.log(a)/Math.log(b),eq=Math.abs(e-c)<1e-9;$('#mr').textContent=b<=1||a<1?'Need a ≥ 1 and b > 1.':`T(n) = ${a}T(n/${b}) + n^${c}. log_${b} ${a} = ${+e.toFixed(3)}. `+(eq?`Work is equal on every level, so T(n) = Θ(n^${c} log n).`:e>c?`The leaves dominate, so T(n) = Θ(n^${+e.toFixed(3)}).`:`The top level dominates, so T(n) = Θ(n^${c}).`)};['ma','mb','md'].forEach(i=>$('#'+i).oninput=d);el.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{const v=b.dataset.m.split(' ');['ma','mb','md'].forEach((i,k)=>$('#'+i).value=v[k]);d()});d()},
+npdiag(el){el.innerHTML=`<svg viewBox="0 0 460 240" class="g" role="img" aria-label="P inside NP, with NP-complete where NP overlaps NP-hard"><ellipse cx="170" cy="125" rx="150" ry="100" class="nd seen" style="opacity:.5"/><ellipse cx="115" cy="130" rx="72" ry="55" class="nd ok"/><ellipse cx="350" cy="125" rx="105" ry="105" class="nd" style="fill:var(--b);opacity:.55"/><text x="115" y="134" class="nt">P</text><text x="170" y="52" class="nt">NP</text><text x="285" y="118" class="nt" style="font-size:12px">NP-</text><text x="285" y="134" class="nt" style="font-size:12px">complete</text><text x="395" y="130" class="nt">NP-hard</text></svg><p class="muted">Drawn assuming P ≠ NP, which is unproved. If P = NP, the P region would fill NP.</p>`}};
+function route(){clearInterval(timer);timer=null;step=null;const h=location.hash.slice(2)||'map',[a,b]=h.split('/');if(a==='t'&&byId[b]){nav(b);topic(b)}else if(a==='conf'){nav('conf');conf()}else if(a==='sheet'){nav('sheet');sheet()}else{nav('map');map()}$('#nav').classList.remove('open')}
+addEventListener('hashchange',route);addEventListener('keydown',e=>{if(!step||/INPUT|TEXTAREA/.test(e.target.tagName))return;if(e.key==='ArrowRight')step(1);if(e.key==='ArrowLeft')step(-1)});route();
+</script></body></html>
